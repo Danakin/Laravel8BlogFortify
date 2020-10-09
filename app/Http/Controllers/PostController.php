@@ -117,6 +117,11 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         //
+
+        if ($post->user_id != auth()->user()->id) {
+            return redirect()->route('posts.edit', $post->slug)->withErrors(['No Permission', 'You have no permission to edit posts from ' . $post->user->name]);
+        }
+
         $slug = Str::slug(
             date("Ymd") . "-" . Str::limit($request->title, 55),
             "-"
@@ -162,6 +167,10 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+        if ($post->user_id != auth()->user()->id) {
+            return redirect()->route('posts.edit', $post->slug)->withErrors(['No Permission', 'You have no permission to delete posts from ' . $post->user->name]);
+        }
+
         $post->delete();
         return redirect()->route('posts.index');
     }
