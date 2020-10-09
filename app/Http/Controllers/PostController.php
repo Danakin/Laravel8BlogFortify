@@ -6,8 +6,11 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
+// use Illuminate\Validation\Rule;
+// use Illuminate\Support\Facades\Validator;
+
+use App\Http\Requests\StoreBlogPost;
+use App\Http\Requests\UpdateBlogPost;
 
 class PostController extends Controller
 {
@@ -45,25 +48,31 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBlogPost $request)
     {
         //
-        $slug = Str::slug(
-            date("Ymd") . "-" . Str::limit($request->title, 55),
-            "-"
-        );
+        // $slug = Str::slug(
+        //     date("Ymd") . "-" . Str::limit($request->title, 55),
+        //     "-"
+        // );
 
-        $validator = Validator::make($request->all(), [
-            "title" => "required|unique:posts|max:255",
-            "slug" => "unique",
-            "description" => "required"
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     "title" => "required|unique:posts|max:255",
+        //     "slug" => "unique",
+        //     "description" => "required"
+        // ]);
 
-        if ($validator->fails()) {
-            return redirect()->route('posts.create')
-                ->withErrors($validator)
-                ->withInput();
-        }
+        // $validated = $request->validated([
+        //     "title" => "required|unique:posts|max:255",
+        //     "slug" => "unique",
+        //     "description" => "required"
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return redirect()->route('posts.create')
+        //         ->withErrors($validator)
+        //         ->withInput();
+        // }
 
         $published = $request->published ? true : false;
 
@@ -79,7 +88,7 @@ class PostController extends Controller
         $post = Post::create([
             "user_id" => auth()->user()->id,
             "title" => $request->title,
-            "slug" => $slug,
+            "slug" => $request->slug,
             "description" => $request->description,
             "image" => $request->image,
             "published" => $published,
@@ -119,18 +128,12 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(UpdateBlogPost $request, Post $post)
     {
-        //
-
-        if ($post->user_id != auth()->user()->id) {
-            return redirect()->route('posts.edit', $post->slug)->withErrors(['No Permission', 'You have no permission to edit posts from ' . $post->user->name]);
-        }
-
-        $slug = Str::slug(
-            date("Ymd") . "-" . Str::limit($request->title, 55),
-            "-"
-        );
+        // $slug = Str::slug(
+        //     date("Ymd") . "-" . Str::limit($request->title, 55),
+        //     "-"
+        // );
 
         // $validatedData = $request->validate([
         //     "title" => ["required", Rule::unique('posts')->ignore($post->id), "max:255"],
@@ -138,23 +141,23 @@ class PostController extends Controller
         //     "description" => "required"
         // ]);
 
-        $validator = Validator::make($request->all(), [
-            "title" => ["required", Rule::unique('posts')->ignore($post->id), "max:255"],
-            "slug" => [Rule::unique('posts')->ignore($post->id)],
-            "description" => "required"
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     "title" => ["required", Rule::unique('posts')->ignore($post->id), "max:255"],
+        //     "slug" => [Rule::unique('posts')->ignore($post->id)],
+        //     "description" => "required"
+        // ]);
 
-        if ($validator->fails()) {
-            return redirect()->route('posts.edit', $post->slug)
-                ->withErrors($validator)
-                ->withInput();
-        }
+        // if ($validator->fails()) {
+        //     return redirect()->route('posts.edit', $post->slug)
+        //         ->withErrors($validator)
+        //         ->withInput();
+        // }
 
 
         $published = $request->published ? true : false;
 
         $post->title = $request->title;
-        $post->slug = $slug;
+        $post->slug = $request->slug;
         $post->description = $request->description;
         $post->published = $published;
         $post->image = $request->image;
