@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PostController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,3 +22,8 @@ Route::get('/', function () {
 Route::get('home', function () {
     return view('home.index');
 })->name('home');
+
+// Route::get('posts/{post:slug}/', [PostController::class, "show"]);
+Route::resource('posts', PostController::class)
+    ->scoped(["post" => "slug"])
+    ->names("posts");

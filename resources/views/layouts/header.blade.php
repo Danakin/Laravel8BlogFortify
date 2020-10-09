@@ -20,4 +20,4 @@
     </style>
 </head>
 
-<body class="antialiased pt-12 min-h-screen flex justify-center items-center">
+<body class="antialiased pt-12 min-h-screen flex justify-center items-center container mx-auto">
