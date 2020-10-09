@@ -1,4 +1,5 @@
+@extends('layouts.app')
+
+@section('content')
 Welcome!
-
-
-        <form action="{{ route('logout') }}" method="post">@csrf <button type="submit">Logout</button></form>
+@endsection
