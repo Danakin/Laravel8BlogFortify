@@ -6,6 +6,8 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -41,11 +43,22 @@ class PostController extends Controller
     public function store(Request $request)
     {
         //
-
         $slug = Str::slug(
             date("Ymd") . "-" . Str::limit($request->title, 55),
             "-"
         );
+
+        $validator = Validator::make($request->all(), [
+            "title" => "required|unique:posts|max:255",
+            "slug" => "unique",
+            "description" => "required"
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('posts.create')
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $published = $request->published ? true : false;
 
@@ -108,6 +121,25 @@ class PostController extends Controller
             date("Ymd") . "-" . Str::limit($request->title, 55),
             "-"
         );
+
+        // $validatedData = $request->validate([
+        //     "title" => ["required", Rule::unique('posts')->ignore($post->id), "max:255"],
+        //     "slug" => [Rule::unique('posts')->ignore($post->id)],
+        //     "description" => "required"
+        // ]);
+
+        $validator = Validator::make($request->all(), [
+            "title" => ["required", Rule::unique('posts')->ignore($post->id), "max:255"],
+            "slug" => [Rule::unique('posts')->ignore($post->id)],
+            "description" => "required"
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('posts.edit', $post->slug)
+                ->withErrors($validator)
+                ->withInput();
+        }
+
 
         $published = $request->published ? true : false;
 

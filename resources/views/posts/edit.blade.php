@@ -4,10 +4,10 @@
     <form action="{{ route('posts.update', $post->slug) }}" method="POST" class="flex flex-wrap">
         @csrf
         @method('put')
-        <x-input-text name="title" value="{{ $post->title }}">Title</x-input-text>
+        <x-input-text name="title" value="{{ old('title', $post->title) }}">Title</x-input-text>
         <x-input-text-area name="description">
             <x-slot name="value">
-                {{ $post->description }}
+                {{ old('description', $post->description) }}
             </x-slot>
             Description
         </x-input-text-area>
