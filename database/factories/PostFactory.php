@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use Illuminate\Support\Str;
+use App\Helper\MakeSlug;
 
 class PostFactory extends Factory
 {
@@ -24,7 +24,7 @@ class PostFactory extends Factory
     public function definition()
     {
         $title = $this->faker->sentence(6, true);
-        $slug = Str::slug(date('Ymd') . '-' . substr($title, 0, 55), '-');
+        $slug = MakeSlug::makeSlug($title);
         return [
             'user_id' => $this->faker->biasedNumberBetween(1, 3),
             'title' => $title,

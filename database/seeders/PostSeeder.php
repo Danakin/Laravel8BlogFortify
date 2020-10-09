@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 use App\Models\Post;
-use Illuminate\Support\Str;
+
+use App\Helper\MakeSlug;
 
 class PostSeeder extends Seeder
 {
@@ -18,7 +19,7 @@ class PostSeeder extends Seeder
     {
         //
         $title = 'Testing a post';
-        $slug = Str::slug(date('Ymd') . '-' . substr($title, 0, 55), '-');
+        $slug = MakeSlug::makeSlug($title);
         Post::create([
             'user_id' => 1,
             'title' => $title,

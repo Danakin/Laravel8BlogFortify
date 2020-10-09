@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 use Illuminate\Validation\Rule;
 
-use Illuminate\Support\Str;
+use App\Helper\MakeSlug;
 
 class UpdateBlogPost extends FormRequest
 {
@@ -46,10 +46,7 @@ class UpdateBlogPost extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug' => Str::slug(
-                date("Ymd") . "-" . Str::limit($this->title, 55),
-                "-"
-            )
+            'slug' => MakeSlug::makeSlug($this->title)
         ]);
     }
 }
