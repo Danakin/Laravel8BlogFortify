@@ -45,7 +45,6 @@
 
         formData = new FormData();
         formData.append('image', blobInfo.blob(), blobInfo.filename());
-        formData.append('post_id', {{ $post->id}} );
 
         xhr.send(formData);
     };

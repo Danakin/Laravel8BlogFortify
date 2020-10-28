@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,10 @@ Route::resource('posts/{post}/comments', CommentController::class)
         "comment" => "id",
     ])
     ->names("comments");
+
+Route::resource('tags', TagController::class);
+
+Route::get('posts/tag/{tag:title}', [
+    PostController::class,
+    'indexFiltered',
+])->name('posts.tag');

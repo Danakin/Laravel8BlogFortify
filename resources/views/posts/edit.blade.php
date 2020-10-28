@@ -14,6 +14,14 @@
         </x-input-text-area>
         <x-input-checkbox name="published" published="{{ $post->published }}">Publish {{ $post->published }}
         </x-input-checkbox>
+        <select name="tags[]" id="tags" multiple>
+            @foreach ($tags as $tag)
+            <option value="{{ $tag->id }}" {{ in_array($tag->id, $tag_ids->toArray()) ? "selected" : "" }}>
+                {{ $tag->title }}
+
+            </option>
+            @endforeach
+        </select>
         <div class="w-full flex justify-around">
             <button type="submit" class="px-4 py-2 bg-green-200">Update!!</button>
             <button type="submit" class="px-4 py-2 bg-red-200"

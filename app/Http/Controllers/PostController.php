@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 use App\Http\Requests\StoreBlogPost;
 use App\Http\Requests\UpdateBlogPost;
 
+use App\Models\Tag;
+
 class PostController extends Controller
 {
     public function __construct()
@@ -31,15 +33,25 @@ class PostController extends Controller
         return view('posts.index', ["posts" => $posts]);
     }
 
+    public function indexFiltered(Tag $tag)
+    {
+        $posts = $tag
+            ->posts()
+            ->orderBy('id', 'desc')
+            ->get();
+        return view('posts.index', ["posts" => $posts]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Tag $tags)
     {
         //
-        return view('posts.create');
+        $tags = Tag::orderBy('title')->get();
+        return view('posts.create', ["tags" => $tags]);
     }
 
     /**
@@ -94,6 +106,13 @@ class PostController extends Controller
             "published" => $published,
         ]);
 
+        if ($request->tags > 0) {
+            $post->tags()->sync($request->input('tags'));
+            // foreach ($request->input('tags') as $tag_id) {
+            //     $post->tags->sync($tag_id);
+            // }
+        }
+
         return redirect()->route('posts.show', $post->slug);
     }
 
@@ -118,7 +137,13 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
-        return view('posts.edit', ["post" => $post]);
+        $tags = Tag::orderBy('title')->get();
+        $tag_ids = $post->tags()->allRelatedIds();
+        return view('posts.edit', [
+            "post" => $post,
+            "tags" => $tags,
+            "tag_ids" => $tag_ids,
+        ]);
     }
 
     /**
@@ -171,6 +196,10 @@ class PostController extends Controller
         $post->published = $published;
         $post->image = $request->image;
         $post->save();
+
+        if ($request->tags > 0) {
+            $post->tags()->sync($request->input('tags'));
+        }
 
         return redirect()->route('posts.show', $post->slug);
     }
