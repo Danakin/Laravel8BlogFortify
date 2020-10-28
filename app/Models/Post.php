@@ -24,11 +24,16 @@ class Post extends Model
     public function getShortDescriptionAttribute()
     {
         // Access with $post->short_description - Laravel Mutators
-        return Str::limit($this->description, 147, '(...)');
+        return Str::limit(strip_tags($this->description), 147, '(...)');
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function images()
+    {
+        return $this->belongsToMany(Image::class);
     }
 }

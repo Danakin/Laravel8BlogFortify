@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,5 @@ Route::get('home', function () {
 Route::resource('posts', PostController::class)
     ->scoped(["post" => "slug"])
     ->names("posts");
+
+Route::resource('images', ImageController::class);
