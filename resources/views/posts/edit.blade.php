@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div>
+    @can('update', $post)
     <form action="{{ route('posts.update', $post->slug) }}" method="POST" class="flex flex-wrap">
         @csrf
         @method('put')
@@ -25,5 +26,8 @@
             <button type="submit" class="px-4 py-2 bg-red-200">Delete!!</button>
         </div>
     </form>
+    @else
+    You are not authorized to update or delete posts by {{ $post->user->name }}
+    @endcan
 </div>
 @endsection

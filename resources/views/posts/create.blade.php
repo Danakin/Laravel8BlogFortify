@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div>
+    @can('create', 'App\Models\Post')
     <form action="{{ route('posts.store') }}" method="POST" class="flex flex-wrap">
         @csrf
         <x-input-text name="title" value="{{ old('title') }}">Title</x-input-text>
@@ -16,5 +17,6 @@
             <button type="submit" class="px-4 py-2 bg-green-200">Post!!</button>
         </div>
     </form>
+    @endcan
 </div>
 @endsection

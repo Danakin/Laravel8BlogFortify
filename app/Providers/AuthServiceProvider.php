@@ -14,6 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\Post' => 'App\Policies\PostPolicy', // Not needed because of Automatic Discovery
     ];
 
     /**
@@ -26,14 +27,14 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // https://laravel.com/docs/8.x/authorization#writing-gates
-        Gate::define('create-posts', function ($user) {
-            return $user->id > 0;
-        });
-        Gate::define('update-post', function ($user, $post) {
-            return $post->user_id === $user->id;
-        });
-        Gate::define('delete-post', function ($user, $post) {
-            return $post->user_id === $user->id;
-        });
+        // Gate::define('create-posts', function ($user) {
+        //     return $user->id > 0;
+        // });
+        // Gate::define('update-post', function ($user, $post) {
+        //     return $post->user_id === $user->id;
+        // });
+        // Gate::define('delete-post', function ($user, $post) {
+        //     return $post->user_id === $user->id;
+        // });
     }
 }

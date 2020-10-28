@@ -17,15 +17,13 @@ class UpdateBlogPost extends FormRequest
      */
     public function authorize()
     {
-        $post = $this->route('post');
-        if ($this->user()->can('update-post', $post)) {
-            return true;
-        } else {
-            return redirect()
-                ->route('posts.edit', $post->slug)
-                ->withErrors(['Unauthorized', 'You need permission to edit posts by ' . $post->user->name])
-                ->withInput();
-        }
+        return true;
+        // $post = $this->route('post');
+        // if ($this->user()->can('update', $post)) {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
     }
 
     /**
@@ -37,8 +35,12 @@ class UpdateBlogPost extends FormRequest
     {
         $post = $this->route('post');
         return [
-            "title" => ["required", Rule::unique('posts')->ignore($post->id), "max:255"],
-            "description" => "required"
+            "title" => [
+                "required",
+                Rule::unique('posts')->ignore($post->id),
+                "max:255",
+            ],
+            "description" => "required",
         ];
     }
 
@@ -46,7 +48,7 @@ class UpdateBlogPost extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug' => MakeSlug::makeSlug($this->title)
+            'slug' => MakeSlug::makeSlug($this->title),
         ]);
     }
 }

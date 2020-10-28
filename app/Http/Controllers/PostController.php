@@ -153,6 +153,15 @@ class PostController extends Controller
         //         ->withInput();
         // }
 
+        if (!$request->user()->can('update', $post)) {
+            return redirect()
+                ->route('posts.edit', $post->slug)
+                ->withErrors([
+                    'Unauthorized',
+                    'You need permission to edit posts by ' . $post->user->name,
+                ])
+                ->withInput();
+        }
 
         $published = $request->published ? true : false;
 
@@ -172,11 +181,18 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Request $request, Post $post)
     {
         //
-        if ($post->user_id != auth()->user()->id) {
-            return redirect()->route('posts.edit', $post->slug)->withErrors(['No Permission', 'You have no permission to delete posts from ' . $post->user->name]);
+        // dd($this->authorize('delete', $post)->toArray());
+        if (!$request->user()->can('delete', $post)) {
+            return redirect()
+                ->route('posts.edit', $post->slug)
+                ->withErrors([
+                    'No Permission',
+                    'You have no permission to delete posts from ' .
+                    $post->user->name,
+                ]);
         }
 
         $post->delete();

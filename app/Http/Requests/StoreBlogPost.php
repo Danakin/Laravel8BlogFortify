@@ -17,8 +17,11 @@ class StoreBlogPost extends FormRequest
      */
     public function authorize()
     {
-        if ($this->user()->can('create-posts')) return true;
-        else return false;
+        if ($this->user()->can('create', \App\Models\Post::class)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -31,7 +34,7 @@ class StoreBlogPost extends FormRequest
         return [
             "title" => "required|unique:posts|max:255",
             "slug" => "unique:posts",
-            "description" => "required"
+            "description" => "required",
         ];
     }
 
@@ -39,7 +42,7 @@ class StoreBlogPost extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'slug' => MakeSlug::makeSlug($this->title)
+            'slug' => MakeSlug::makeSlug($this->title),
         ]);
     }
 }
