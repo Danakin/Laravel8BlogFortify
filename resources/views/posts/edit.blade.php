@@ -30,4 +30,5 @@
     You are not authorized to update or delete posts by {{ $post->user->name }}
     @endcan
 </div>
+@include('posts.tinymce')
 @endsection

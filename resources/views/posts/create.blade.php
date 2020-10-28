@@ -19,4 +19,6 @@
     </form>
     @endcan
 </div>
+
+@include('posts.tinymce')
 @endsection
