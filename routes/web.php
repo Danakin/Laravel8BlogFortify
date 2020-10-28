@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +31,10 @@ Route::resource('posts', PostController::class)
     ->names("posts");
 
 Route::resource('images', ImageController::class);
+
+Route::resource('posts/{post}/comments', CommentController::class)
+    ->scoped([
+        "post" => "slug",
+        "comment" => "id",
+    ])
+    ->names("comments");
