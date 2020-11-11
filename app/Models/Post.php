@@ -20,6 +20,17 @@ class Post extends Model
         "published",
     ];
 
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    //     static::creating(function ($post) {
+    //         $post->slug = Str::slug(
+    //             date("Ymd") . "-" . Str::limit($post->title, 55),
+    //             "-"
+    //         );
+    //     });
+    // }
+
     // https://laravel.com/docs/8.x/eloquent-mutators#defining-an-accessor
     public function getShortDescriptionAttribute()
     {

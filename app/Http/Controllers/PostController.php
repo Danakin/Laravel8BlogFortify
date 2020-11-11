@@ -97,6 +97,13 @@ class PostController extends Controller
         // 3.
         //   auth()->user()->id;
 
+        /*
+            $request['slug'] = Str::slug(date("Ymd") . "-" . Str::limit($title, 55),"-");
+            // 1. $request['user_id'] = auth()->user()->id;
+            //    $post = Post::create($request->all());
+            // 2. $post = auth()->user()->posts()->create($request->all());
+        */
+
         $post = Post::create([
             "user_id" => auth()->user()->id,
             "title" => $request->title,
